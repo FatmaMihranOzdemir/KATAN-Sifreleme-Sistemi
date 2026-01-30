@@ -1,0 +1,78 @@
+﻿@page
+@model KatanWeb.Pages.IndexModel
+@{
+    ViewData["Title"] = "KATAN Şifreleme";
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/katan.css" asp-append-version="true" />
+</head>
+
+<body>
+    <div class="wrap">
+        <header class="top">
+            <div>
+                <h1>KATAN ŞİFRELEME</h1>
+                <div class="sub">Hafif Blok Şifreleme (32 / 48 / 64)</div>
+            </div>
+        </header>
+
+        <form method="post" class="panel">
+            <div class="row">
+                <div class="blocksize">
+                    <div class="label">BLOK BOYUTU</div>
+                    <div class="radios">
+                        <label class="radio">
+                            @* Fixed radio button binding - using correct Razor syntax *@
+                            <input type="radio" name="BlockSize" value="32" @(Model.BlockSize == 32 ? "checked" : "") />
+                            <span>32-BİT</span>
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="BlockSize" value="48" @(Model.BlockSize == 48 ? "checked" : "") />
+                            <span>48-BİT</span>
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="BlockSize" value="64" @(Model.BlockSize == 64 ? "checked" : "") />
+                            <span>64-BİT</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="keybox">
+                    <div class="label">ŞİFRELEME ANAHTARI (10 KARAKTER ÖNERİLİR)</div>
+                    <input class="key" type="text" name="Key" value="@Model.Key" placeholder="Örn: 1234567890" />
+                </div>
+            </div>
+
+            <div class="grid">
+                <section class="card">
+                    <div class="card-title">ŞİFRELENECEK / ÇÖZÜLMÜŞ METİN</div>
+                    <textarea name="PlainText" class="area" placeholder="Örn: bugün hava çok güzel">@Model.PlainText</textarea>
+                    <div class="note">Not: Şifrelemek için buraya metni yaz ve "Şifrele"ye bas.</div>
+                </section>
+
+                <section class="card">
+                    <div class="card-title">HEX (ŞİFRELİ ÇIKTI / ÇÖZÜLECEK GİRİŞ)</div>
+                    <textarea name="HexText" class="area" placeholder="Örn: 534754F7...">@Model.HexText</textarea>
+                    <div class="note">Not: Çözmek için buraya HEX yapıştır ve "Şifreyi Çöz"e bas.</div>
+                </section>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-green" type="submit" asp-page-handler="Encrypt">[ ŞİFRELE ]</button>
+                <button class="btn btn-blue" type="submit" asp-page-handler="Decrypt">[ ŞİFREYİ ÇÖZ ]</button>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="err">Hata: @Model.ErrorMessage</div>
+            }
+        </form>
+    </div>
+</body>
+</html>
